@@ -7,6 +7,7 @@ import (
     "os/exec"
     "strconv"
     "strings"
+    "os"
     //"time"
 )
 
@@ -17,10 +18,11 @@ type SysInfo struct {
 }
 
 /*
-* Printlog for linux 
+* exec vmstat command
 */
-func Printlog(fname string) int {
-	cmd := exec.Command("vmstat")
+func getSystemInfo() []*SysInfo{
+
+    cmd := exec.Command("vmstat")
     var out bytes.Buffer
     var stderr bytes.Buffer
 
@@ -68,10 +70,51 @@ func Printlog(fname string) int {
         }
 
         sysInfo = append(sysInfo, &SysInfo{mem_used, mem_free, cpu_used})
-        for _, s := range(sysInfo) {
-            log.Println("[", fname, "] ,mem-used : ", s.mem_used, ",mem-free : ", s.mem_free ,",cpu-used : ", s.cpu_used )
-        }
+
     }
 
-   return 0;
+    return sysInfo;
+}
+
+/*
+* to convert a float number to a string
+*/
+func floattostr(input_num float64) string {
+    // to convert a float number to a string
+    return strconv.FormatFloat(input_num, 'g', 1, 64)
+}
+
+/*
+* Printfile for linux 
+*/
+func Printfile(func_n string , file_n string) bool {
+    //t := time.Now()
+    fout, err := os.Create(file_n)
+    if err != nil {
+        fmt.Println(file_n, err)
+        return false
+    }
+
+    sysInfo := getSystemInfo()
+
+    for _, s := range(sysInfo) {
+        str := []string{"[", func_n , "] ,mem-used : ", strconv.Itoa(s.mem_used) , ",mem-free : " , strconv.Itoa(s.mem_free) , ",cpu-used : ", floattostr(s.cpu_used),"\n"}
+        strjoin :=  strings.Join(str, "")
+        fout.WriteString(strjoin)
+    }
+
+    return true;
+}
+
+/*
+* Printlog for linux 
+*/
+func Printlog(func_n string) bool {
+    sysInfo := getSystemInfo()
+    
+    for _, s := range(sysInfo) {
+        log.Println("[", func_n, "] ,mem-used : ", s.mem_used, ",mem-free : ", s.mem_free ,",cpu-used : ", s.cpu_used )
+    }
+
+    return true;
 }
