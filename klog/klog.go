@@ -98,7 +98,7 @@ func Printfile(func_n string , file_n string) bool {
     sysInfo := getSystemInfo()
 
     for _, s := range(sysInfo) {
-        str := []string{"[", func_n , "] ,mem-used : ", strconv.Itoa(s.mem_used) , ",mem-free : " , strconv.Itoa(s.mem_free) , ",cpu-used : ", floattostr(s.cpu_used),"\n"}
+        str := []string{"[", func_n , "] ,mem-used : ", strconv.Itoa(s.mem_used) , "kB ,mem-free : " , strconv.Itoa(s.mem_free) , "kB ,cpu-used : ", floattostr(s.cpu_used),"％\n"}
         strjoin :=  strings.Join(str, "")
         fout.WriteString(strjoin)
     }
@@ -113,7 +113,7 @@ func Printlog(func_n string) bool {
     sysInfo := getSystemInfo()
     
     for _, s := range(sysInfo) {
-        log.Println("[", func_n, "] ,mem-used : ", s.mem_used, ",mem-free : ", s.mem_free ,",cpu-used : ", s.cpu_used )
+        log.Println("[", func_n, "] ,mem-used : ", s.mem_used, "kB ,mem-free : ", s.mem_free ,"kB ,cpu-used : ", s.cpu_used ,"％")
     }
 
     return true;
