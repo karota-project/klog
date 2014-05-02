@@ -8,7 +8,8 @@ klog
 - Linux向け (for linux)
 
 ## ToDo
-- ファイル出力
+- ファイル出力で追記モードにする
+- ファイル出力時に時刻を入れる
 
 ## Usage
 - 定義
@@ -28,6 +29,7 @@ import (
 
 func main () {
 	klog.Printlog("function-name")
+	klog.Printfile("function-name","output-file-name")
 }
 </pre>
 
