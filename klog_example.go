@@ -1,10 +1,10 @@
 package main
 
 import (
-  "./klog"
+	"./klog"
 )
 
-func main () {
+func main() {
 	klog.Printlog("function-name")
-	klog.Printfile("function-name","output-file-name")
+	klog.Printfile("function-name", "output-file-name")
 }
