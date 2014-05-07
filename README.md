@@ -38,3 +38,8 @@ func main () {
 <pre>
 2014/04/28 07:00:34 [ function-name ] ,mem-used :  524004 ,mem-free :  105696 ,cpu-used :  1
 </pre>
+
+- ファイル出力
+
+<pre>
+2014-05-07 23:00:49.013940694 +0900 JST,TestPrintfile ,mem-used : 336008kB ,mem-free : 503652kB ,cpu-used : 4％</pre>
