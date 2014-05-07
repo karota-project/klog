@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
-	//"time"
+	"time"
 )
 
 type SysInfo struct {
@@ -88,8 +88,10 @@ func floattostr(input_num float64) string {
 * Printfile for linux
  */
 func Printfile(func_n string, file_n string) bool {
-	//t := time.Now()
-	fout, err := os.Create(file_n)
+	t := time.Now()
+	str := fmt.Sprintf("%v", t)
+
+	f, err := os.OpenFile(file_n, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0660)
 	if err != nil {
 		fmt.Println(file_n, err)
 		return false
@@ -98,10 +100,12 @@ func Printfile(func_n string, file_n string) bool {
 	sysInfo := getSystemInfo()
 
 	for _, s := range sysInfo {
-		str := []string{"[", func_n, "] ,mem-used : ", strconv.Itoa(s.mem_used), "kB ,mem-free : ", strconv.Itoa(s.mem_free), "kB ,cpu-used : ", floattostr(s.cpu_used), "％\n"}
+		str := []string{"time : ", str, ",func : ", func_n, " ,mem-used : ", strconv.Itoa(s.mem_used), "kB ,mem-free : ", strconv.Itoa(s.mem_free), "kB ,cpu-used : ", floattostr(s.cpu_used), "％\n"}
 		strjoin := strings.Join(str, "")
-		fout.WriteString(strjoin)
+		f.WriteString(strjoin)
 	}
+
+	defer f.Close()
 
 	return true
 }
