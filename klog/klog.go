@@ -89,7 +89,8 @@ func floattostr(input_num float64) string {
 * output file for linux
  */
 func Printfile(_func string, outfile string) bool {
-	_, file, _, _ := runtime.Caller(1)
+	_, file, line, _ := runtime.Caller(1)
+	_line := strconv.Itoa(line)
 
 	t := time.Now()
 	str := fmt.Sprintf("%v", t)
@@ -103,7 +104,7 @@ func Printfile(_func string, outfile string) bool {
 	sysInfo := getSystemInfo()
 
 	for _, s := range sysInfo {
-		str := []string{"time : ", str, ",file : ", file, ",func : ", _func, " ,mem-used : ", strconv.Itoa(s.mem_used), "kB ,mem-free : ", strconv.Itoa(s.mem_free), "kB ,cpu-used : ", floattostr(s.cpu_used), "％\n"}
+		str := []string{"time : ", str, ",file : ", file, "(", _line, ")", ",func : ", _func, " ,mem-used : ", strconv.Itoa(s.mem_used), "kB ,mem-free : ", strconv.Itoa(s.mem_free), "kB ,cpu-used : ", floattostr(s.cpu_used), "％\n"}
 		strjoin := strings.Join(str, "")
 		f.WriteString(strjoin)
 	}
@@ -117,12 +118,12 @@ func Printfile(_func string, outfile string) bool {
 * Printlog for linux
  */
 func Printlog(_func string) bool {
-	_, file, _, _ := runtime.Caller(1)
+	_, file, line, _ := runtime.Caller(1)
 
 	sysInfo := getSystemInfo()
 
 	for _, s := range sysInfo {
-		log.Println(file, " ,", _func, ",mem-used : ", s.mem_used, "kB ,mem-free : ", s.mem_free, "kB ,cpu-used : ", s.cpu_used, "％")
+		log.Println(file, "(", line, "),", _func, ",mem-used : ", s.mem_used, "kB ,mem-free : ", s.mem_free, "kB ,cpu-used : ", s.cpu_used, "％")
 	}
 
 	return true
