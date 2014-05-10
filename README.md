@@ -36,10 +36,11 @@ func main () {
 - 標準出力
 
 <pre>
-2014/04/28 07:00:34 [ function-name ] ,mem-used :  524004 ,mem-free :  105696 ,cpu-used :  1
+2014/05/08 04:05:22 klog_example.go  , function-name ,mem-used :  557212 kB ,mem-free :  122896 kB ,cpu-used :  1 ％
 </pre>
 
 - ファイル出力
 
 <pre>
-2014-05-07 23:00:49.013940694 +0900 JST,TestPrintfile ,mem-used : 336008kB ,mem-free : 503652kB ,cpu-used : 4％</pre>
+time : 2014-05-08 04:09:26.045481644 +0900 JST,file :klog_example.go,func : function-name ,mem-used : 564040kB ,mem-free : 107936kB ,cpu-used : 1％
+</pre>

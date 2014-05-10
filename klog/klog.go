@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -85,22 +86,24 @@ func floattostr(input_num float64) string {
 }
 
 /*
-* Printfile for linux
+* output file for linux
  */
-func Printfile(func_n string, file_n string) bool {
+func Printfile(_func string, outfile string) bool {
+	_, file, _, _ := runtime.Caller(1)
+
 	t := time.Now()
 	str := fmt.Sprintf("%v", t)
 
-	f, err := os.OpenFile(file_n, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0660)
+	f, err := os.OpenFile(outfile, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0660)
 	if err != nil {
-		fmt.Println(file_n, err)
+		fmt.Println(outfile, err)
 		return false
 	}
 
 	sysInfo := getSystemInfo()
 
 	for _, s := range sysInfo {
-		str := []string{"time : ", str, ",func : ", func_n, " ,mem-used : ", strconv.Itoa(s.mem_used), "kB ,mem-free : ", strconv.Itoa(s.mem_free), "kB ,cpu-used : ", floattostr(s.cpu_used), "％\n"}
+		str := []string{"time : ", str, ",file : ", file, ",func : ", _func, " ,mem-used : ", strconv.Itoa(s.mem_used), "kB ,mem-free : ", strconv.Itoa(s.mem_free), "kB ,cpu-used : ", floattostr(s.cpu_used), "％\n"}
 		strjoin := strings.Join(str, "")
 		f.WriteString(strjoin)
 	}
@@ -113,11 +116,13 @@ func Printfile(func_n string, file_n string) bool {
 /*
 * Printlog for linux
  */
-func Printlog(func_n string) bool {
+func Printlog(_func string) bool {
+	_, file, _, _ := runtime.Caller(1)
+
 	sysInfo := getSystemInfo()
 
 	for _, s := range sysInfo {
-		log.Println("[", func_n, "] ,mem-used : ", s.mem_used, "kB ,mem-free : ", s.mem_free, "kB ,cpu-used : ", s.cpu_used, "％")
+		log.Println(file, " ,", _func, ",mem-used : ", s.mem_used, "kB ,mem-free : ", s.mem_free, "kB ,cpu-used : ", s.cpu_used, "％")
 	}
 
 	return true
