@@ -2,9 +2,17 @@ package main
 
 import (
 	"./klog"
+	"fmt"
 )
 
 func main() {
-	klog.Printlog("function-name")
-	klog.Printfile("function-name", "output-file-name")
+	s , err := klog.Printlog("function-name")
+	if err != nil {
+		fmt.Println(s, err)
+	}
+
+	s , err = klog.Printfile("function-name", "output-file-name")
+	if err != nil {
+		fmt.Println(s, err)
+	}
 }

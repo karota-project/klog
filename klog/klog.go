@@ -21,7 +21,7 @@ type SysInfo struct {
 /*
 * exec vmstat command
  */
-func getSystemInfo() []*SysInfo {
+func getSystemInfo() ( sysInfo []*SysInfo , err error ) {
 
 	cmd := exec.Command("vmstat")
 	var out bytes.Buffer
@@ -30,12 +30,12 @@ func getSystemInfo() []*SysInfo {
 	cmd.Stdout = &out
 	cmd.Stderr = &stderr
 
-	err := cmd.Run()
+	err = cmd.Run()
 	if err != nil {
 		fmt.Println(fmt.Sprint(err) + ": " + stderr.String())
 	}
 
-	sysInfo := make([]*SysInfo, 0)
+	sysInfo = make([]*SysInfo, 0)
 	for {
 		line, err := out.ReadString('\n')
 		if err != nil {
@@ -74,7 +74,7 @@ func getSystemInfo() []*SysInfo {
 
 	}
 
-	return sysInfo
+	return sysInfo ,err
 }
 
 /*
@@ -88,7 +88,7 @@ func floattostr(input_num float64) string {
 /*
 * output file for linux
  */
-func Printfile(_func string, outfile string) bool {
+func Printfile(_func string, outfile string) (result bool, err error) {
 	_, file, line, _ := runtime.Caller(1)
 	_line := strconv.Itoa(line)
 
@@ -97,11 +97,13 @@ func Printfile(_func string, outfile string) bool {
 
 	f, err := os.OpenFile(outfile, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0660)
 	if err != nil {
-		fmt.Println(outfile, err)
-		return false
+		return false, err
 	}
 
-	sysInfo := getSystemInfo()
+	sysInfo,err := getSystemInfo()
+	if err != nil {
+		return false, err
+	}
 
 	for _, s := range sysInfo {
 		str := []string{"time : ", str, ",file : ", file, "(", _line, ")", ",func : ", _func, " ,mem-used : ", strconv.Itoa(s.mem_used), "kB ,mem-free : ", strconv.Itoa(s.mem_free), "kB ,cpu-used : ", floattostr(s.cpu_used), "％\n"}
@@ -111,20 +113,23 @@ func Printfile(_func string, outfile string) bool {
 
 	defer f.Close()
 
-	return true
+	return true , nil
 }
 
 /*
 * Printlog for linux
  */
-func Printlog(_func string) bool {
+func Printlog(_func string) (result bool, err error)  {
 	_, file, line, _ := runtime.Caller(1)
 
-	sysInfo := getSystemInfo()
+	sysInfo,err := getSystemInfo()
+	if err != nil {
+		return false, err
+	}
 
 	for _, s := range sysInfo {
 		log.Println(file, "(", line, "),", _func, ",mem-used : ", s.mem_used, "kB ,mem-free : ", s.mem_free, "kB ,cpu-used : ", s.cpu_used, "％")
 	}
 
-	return true
+	return true ,nil
 }
