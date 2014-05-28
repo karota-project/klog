@@ -15,21 +15,20 @@ klog
 - 定義
 
 <pre>
-func Printlog(fname string) int
+func Printlog(_func string) (result bool, err error) 
 </pre>
 
 - 使い方
 
 <pre>
-package main
+s , err := klog.Printlog("function-name")
+if err != nil {
+	fmt.Println(s, err)
+}
 
-import (
-  "./klog"
-)
-
-func main () {
-	klog.Printlog("function-name")
-	klog.Printfile("function-name","output-file-name")
+s , err = klog.Printfile("function-name", "output-file-name")
+if err != nil {
+	fmt.Println(s, err)
 }
 </pre>
 
