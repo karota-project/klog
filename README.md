@@ -8,8 +8,6 @@ klog
 - Linux向け (for linux)
 
 ## ToDo
-- ファイル出力で追記モードにする
-- ファイル出力時に時刻を入れる
 
 ## Usage
 - 定義
@@ -35,11 +33,6 @@ if err != nil {
 - 標準出力
 
 <pre>
-2014/05/08 04:05:22 klog_example.go  , function-name ,mem-used :  557212 kB ,mem-free :  122896 kB ,cpu-used :  1 ％
+[2014-06-07 10:58:20.300722544 +0900 JST] /klog-master/klog_example.go(line14) {"func" : "main" ,"mem_used" : 379220, "mem_free" : 480440, "cpu_used" : 2}
 </pre>
 
-- ファイル出力
-
-<pre>
-time : 2014-05-08 04:09:26.045481644 +0900 JST,file :klog_example.go,func : function-name ,mem-used : 564040kB ,mem-free : 107936kB ,cpu-used : 1％
-</pre>
