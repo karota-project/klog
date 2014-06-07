@@ -106,7 +106,7 @@ func Printfile(_func string, outfile string) (result bool, err error) {
 	}
 
 	for _, s := range sysInfo {
-		str := []string{"time : ", str, ",file : ", file, "(", _line, ")", ",func : ", _func, " ,mem-used : ", strconv.Itoa(s.mem_used), "kB ,mem-free : ", strconv.Itoa(s.mem_free), "kB ,cpu-used : ", floattostr(s.cpu_used), "％\n"}
+		str := []string{"[", str, "] ", file, "(line", _line, ") {\"func\" : \"", _func, "\" ,\"mem_used\" : ", strconv.Itoa(s.mem_used), ", \"mem_free\" : ", strconv.Itoa(s.mem_free), ", \"cpu_used\" : ", floattostr(s.cpu_used), "}\n"}
 		strjoin := strings.Join(str, "")
 		f.WriteString(strjoin)
 	}
@@ -128,7 +128,7 @@ func Printlog(_func string) (result bool, err error)  {
 	}
 
 	for _, s := range sysInfo {
-		log.Println(file, "(", line, "),", _func, ",mem-used : ", s.mem_used, "kB ,mem-free : ", s.mem_free, "kB ,cpu-used : ", s.cpu_used, "％")
+		log.Println(file, "(line", line, ") {\"func\" : \"", _func, "\", \"mem_used\" : ", s.mem_used, ",\"mem_free\" : ", s.mem_free, ",\"cpu_used\" : ", s.cpu_used, "}")
 	}
 
 	return true ,nil
