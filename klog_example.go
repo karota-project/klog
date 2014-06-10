@@ -6,12 +6,12 @@ import (
 )
 
 func main() {
-	s , err := klog.Printlog("main")
+	s, err := klog.Printlog("main")
 	if err != nil {
 		fmt.Println(s, err)
 	}
 
-	s , err = klog.Printfile("main", "sample.log")
+	s, err = klog.Printfile("main", "sample.log")
 	if err != nil {
 		fmt.Println(s, err)
 	}

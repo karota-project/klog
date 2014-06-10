@@ -21,7 +21,7 @@ type SysInfo struct {
 /*
 * exec vmstat command
  */
-func getSystemInfo() ( sysInfo []*SysInfo , err error ) {
+func getSystemInfo() (sysInfo []*SysInfo, err error) {
 
 	cmd := exec.Command("vmstat")
 	var out bytes.Buffer
@@ -74,7 +74,7 @@ func getSystemInfo() ( sysInfo []*SysInfo , err error ) {
 
 	}
 
-	return sysInfo ,err
+	return sysInfo, err
 }
 
 /*
@@ -100,7 +100,7 @@ func Printfile(_func string, outfile string) (result bool, err error) {
 		return false, err
 	}
 
-	sysInfo,err := getSystemInfo()
+	sysInfo, err := getSystemInfo()
 	if err != nil {
 		return false, err
 	}
@@ -113,16 +113,16 @@ func Printfile(_func string, outfile string) (result bool, err error) {
 
 	defer f.Close()
 
-	return true , nil
+	return true, nil
 }
 
 /*
 * Printlog for linux
  */
-func Printlog(_func string) (result bool, err error)  {
+func Printlog(_func string) (result bool, err error) {
 	_, file, line, _ := runtime.Caller(1)
 
-	sysInfo,err := getSystemInfo()
+	sysInfo, err := getSystemInfo()
 	if err != nil {
 		return false, err
 	}
@@ -131,5 +131,5 @@ func Printlog(_func string) (result bool, err error)  {
 		log.Println(file, "(line", line, ") {\"func\" : \"", _func, "\", \"mem_used\" : ", s.mem_used, ",\"mem_free\" : ", s.mem_free, ",\"cpu_used\" : ", s.cpu_used, "}")
 	}
 
-	return true ,nil
+	return true, nil
 }
