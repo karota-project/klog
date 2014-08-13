@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"log"
-    "log/syslog"
+	"log/syslog"
 	"os"
 	"os/exec"
 	"runtime"
@@ -22,45 +22,45 @@ type SysInfo struct {
 type Priority int
 
 const (
-        // From /usr/include/sys/syslog.h.
-        // These are the same on Linux, BSD, and OS X.
-        LOG_EMERG Priority = iota
-        LOG_ALERT
-        LOG_CRIT
-        LOG_ERR
-        LOG_WARNING
-        LOG_NOTICE
-        LOG_INFO
-        LOG_DEBUG
+	// From /usr/include/sys/syslog.h.
+	// These are the same on Linux, BSD, and OS X.
+	LOG_EMERG Priority = iota
+	LOG_ALERT
+	LOG_CRIT
+	LOG_ERR
+	LOG_WARNING
+	LOG_NOTICE
+	LOG_INFO
+	LOG_DEBUG
 )
 
-func convToSyslogPriority(p Priority) ( _p syslog.Priority) {
-    
-    switch {
-    case p == LOG_EMERG:
-    	_p = syslog.LOG_EMERG
-    case p == LOG_ALERT:
-    	_p = syslog.LOG_ALERT
-    case p == LOG_CRIT:
-    	_p = syslog.LOG_CRIT
-    case p == LOG_ERR:
-    	_p = syslog.LOG_ERR
-    case p == LOG_WARNING:
-    	_p = syslog.LOG_WARNING
-    case p == LOG_NOTICE:
-    	_p = syslog.LOG_NOTICE 
-    case p == LOG_INFO:
-    	_p = syslog.LOG_INFO
-    case p == LOG_DEBUG:
-    	_p = syslog.LOG_DEBUG
-    }
-    return _p
+func convToSyslogPriority(p Priority) (_p syslog.Priority) {
+
+	switch {
+	case p == LOG_EMERG:
+		_p = syslog.LOG_EMERG
+	case p == LOG_ALERT:
+		_p = syslog.LOG_ALERT
+	case p == LOG_CRIT:
+		_p = syslog.LOG_CRIT
+	case p == LOG_ERR:
+		_p = syslog.LOG_ERR
+	case p == LOG_WARNING:
+		_p = syslog.LOG_WARNING
+	case p == LOG_NOTICE:
+		_p = syslog.LOG_NOTICE
+	case p == LOG_INFO:
+		_p = syslog.LOG_INFO
+	case p == LOG_DEBUG:
+		_p = syslog.LOG_DEBUG
+	}
+	return _p
 }
 
 /*
 * exec vmstat command
  */
-func getSystemInfo() ( sysInfo []*SysInfo , err error ) {
+func getSystemInfo() (sysInfo []*SysInfo, err error) {
 
 	cmd := exec.Command("vmstat")
 	var out bytes.Buffer
@@ -113,7 +113,7 @@ func getSystemInfo() ( sysInfo []*SysInfo , err error ) {
 
 	}
 
-	return sysInfo ,err
+	return sysInfo, err
 }
 
 /*
@@ -139,7 +139,7 @@ func WriteFile(_func string, outfile string) (result bool, err error) {
 		return false, err
 	}
 
-	sysInfo,err := getSystemInfo()
+	sysInfo, err := getSystemInfo()
 	if err != nil {
 		return false, err
 	}
@@ -152,16 +152,16 @@ func WriteFile(_func string, outfile string) (result bool, err error) {
 
 	defer f.Close()
 
-	return true , nil
+	return true, nil
 }
 
 /*
 * Printlog for linux
  */
-func Stdout(_func string) (result bool, err error)  {
+func Stdout(_func string) (result bool, err error) {
 	_, file, line, _ := runtime.Caller(1)
 
-	sysInfo,err := getSystemInfo()
+	sysInfo, err := getSystemInfo()
 	if err != nil {
 		return false, err
 	}
@@ -170,26 +170,26 @@ func Stdout(_func string) (result bool, err error)  {
 		log.Println(file, "(line", line, ") {\"func\" : \"", _func, "\", \"mem_used\" : ", s.mem_used, ",\"mem_free\" : ", s.mem_free, ",\"cpu_used\" : ", s.cpu_used, "}")
 	}
 
-	return true ,nil
+	return true, nil
 }
 
 /*
 * Print syslog for unix
-*/
+ */
 
-func Syslog(p Priority, facility string)  (result bool, err error){
+func Syslog(p Priority, facility string) (result bool, err error) {
 
 	_p := convToSyslogPriority(p)
 
-    // Configure logger to write to the syslog. You could do this in init(), too.
-    logwriter, err := syslog.New(_p, facility)
-    if err != nil {
-    	return false ,err
-    }
+	// Configure logger to write to the syslog. You could do this in init(), too.
+	logwriter, err := syslog.New(_p, facility)
+	if err != nil {
+		return false, err
+	}
 
-    log.SetOutput(logwriter)
+	log.SetOutput(logwriter)
 
-    sysInfo,err := getSystemInfo()
+	sysInfo, err := getSystemInfo()
 	if err != nil {
 		return false, err
 	}
@@ -197,9 +197,9 @@ func Syslog(p Priority, facility string)  (result bool, err error){
 	for _, s := range sysInfo {
 		str := []string{"{\"mem_used\" : ", strconv.Itoa(s.mem_used), ", \"mem_free\" : ", strconv.Itoa(s.mem_free), ", \"cpu_used\" : ", floattostr(s.cpu_used), "}\n"}
 		strjoin := strings.Join(str, "")
-        // $ cat /var/log/system.log | grep karota
+		// $ cat /var/log/system.log | grep karota
 		log.Print(strjoin)
 	}
 
-    return true ,nil
+	return true, nil
 }
