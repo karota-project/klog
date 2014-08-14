@@ -1,8 +1,9 @@
 package main
 
 import (
-	"./klog"
 	"fmt"
+
+	"github.com/karota-project/klog"
 )
 
 func main() {
