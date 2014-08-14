@@ -12,27 +12,27 @@ klog
 - 定義
 
 <pre>
-func Stdout(_func string) (result bool, err error)
-func Syslog(p Priority, facility string)  (result bool, err error)
-func WriteFile(_func string, outfile string) (result bool, err error)
+func Stdout(_func string) (err error) 
+func Syslog(p Priority, facility string) (err error) 
+func WriteFile(_func string, outfile string) (err error) 
 </pre>
 
 - 使い方
 
 <pre>
-s , err := klog.Stdout("main")
+err := klog.Stdout("main")
 if err != nil {
-	fmt.Println(s, err)
+	fmt.Println(err)
 }
 
-s , err = klog.WriteFile("main", "sample.log")
+err = klog.WriteFile("main", "sample.log")
 if err != nil {
-	fmt.Println(s, err)
+	fmt.Println(err)
 }
 
-s, err  = klog.Syslog(klog.LOG_NOTICE, "main")
+err = klog.Syslog(klog.LOG_NOTICE, "main")
 if err != nil {
-	fmt.Println(s, err)
+	fmt.Println(err)
 }
 </pre>
 
