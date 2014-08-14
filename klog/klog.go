@@ -127,7 +127,7 @@ func floattostr(input_num float64) string {
 /*
 * Write file
  */
-func WriteFile(_func string, outfile string) (result bool, err error) {
+func WriteFile(_func string, outfile string) (err error) {
 	_, file, line, _ := runtime.Caller(1)
 	_line := strconv.Itoa(line)
 
@@ -158,7 +158,7 @@ func WriteFile(_func string, outfile string) (result bool, err error) {
 /*
 * Printlog for linux
  */
-func Stdout(_func string) (result bool, err error) {
+func Stdout(_func string) (err error) {
 	_, file, line, _ := runtime.Caller(1)
 
 	sysInfo, err := getSystemInfo()
@@ -177,7 +177,7 @@ func Stdout(_func string) (result bool, err error) {
 * Print syslog for unix
  */
 
-func Syslog(p Priority, facility string) (result bool, err error) {
+func Syslog(p Priority, facility string) (err error) {
 
 	_p := convToSyslogPriority(p)
 
