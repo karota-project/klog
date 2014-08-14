@@ -136,12 +136,12 @@ func WriteFile(_func string, outfile string) (result bool, err error) {
 
 	f, err := os.OpenFile(outfile, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0660)
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	sysInfo, err := getSystemInfo()
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	for _, s := range sysInfo {
@@ -152,7 +152,7 @@ func WriteFile(_func string, outfile string) (result bool, err error) {
 
 	defer f.Close()
 
-	return true, nil
+	return nil
 }
 
 /*
@@ -163,14 +163,14 @@ func Stdout(_func string) (result bool, err error) {
 
 	sysInfo, err := getSystemInfo()
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	for _, s := range sysInfo {
 		log.Println(file, "(line", line, ") {\"func\" : \"", _func, "\", \"mem_used\" : ", s.mem_used, ",\"mem_free\" : ", s.mem_free, ",\"cpu_used\" : ", s.cpu_used, "}")
 	}
 
-	return true, nil
+	return nil
 }
 
 /*
@@ -184,14 +184,14 @@ func Syslog(p Priority, facility string) (result bool, err error) {
 	// Configure logger to write to the syslog. You could do this in init(), too.
 	logwriter, err := syslog.New(_p, facility)
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	log.SetOutput(logwriter)
 
 	sysInfo, err := getSystemInfo()
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	for _, s := range sysInfo {
@@ -201,5 +201,5 @@ func Syslog(p Priority, facility string) (result bool, err error) {
 		log.Print(strjoin)
 	}
 
-	return true, nil
+	return nil
 }

@@ -6,18 +6,18 @@ import (
 )
 
 func main() {
-	s, err := klog.Stdout("main")
+	err := klog.Stdout("main")
 	if err != nil {
-		fmt.Println(s, err)
+		fmt.Println(err)
 	}
 
-	s, err = klog.WriteFile("main", "sample.log")
+	err = klog.WriteFile("main", "sample.log")
 	if err != nil {
-		fmt.Println(s, err)
+		fmt.Println(err)
 	}
 
-	s, err = klog.Syslog(klog.LOG_NOTICE, "main")
+	err = klog.Syslog(klog.LOG_NOTICE, "main")
 	if err != nil {
-		fmt.Println(s, err)
+		fmt.Println(err)
 	}
 }
